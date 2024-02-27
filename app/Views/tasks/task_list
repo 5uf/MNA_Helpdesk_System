@@ -1,0 +1,108 @@
+<?php
+include "dbconn.php";  // Using database connection file here
+$sql="select username from staff where aturan != 0 ";
+$re = mysqli_query($dbconn, $sql);  // Use select query here 
+?>
+<div class="align-top">
+<div class="container-fluid">
+<div class="row justify-content-md-center">
+    <div class="col-lg-6">
+     <div class="card">
+      <div class="card-header" align="center">Reset User Password</div>
+       <div class="card-body">
+      <form action="/reset" method="post">
+          <?= csrf_field() ?>
+       <div class="form-group">
+     <label for="cc-payment" class="control-label mb-1"><b>Cari Tugasan Untuk :</b>&nbsp;</label>
+     <select name="username" required>
+     <option disabled selected>Nama Staf</option>
+             <?php
+           while($data = mysqli_fetch_assoc($re)){
+           echo "<option value='". $data['username'] ."'>". $data['nama'] ."</option>";  // displaying data in option menu
+                } ?></select>
+ </div>
+<?php if (! empty($report) && is_array($report)) : ?>
+<div class="row justify-content-md-right m-t-30">
+<div class="col-md-12 ">
+<nav class="navbar navbar-expand-sm sticky-top navbar-light bg-light">
+<div class="container-fluid">
+<div class="align-right"> 
+<button class="btn btn-primary"><a href="/staff/task/new" style="color: white;">Tambah</a></button>
+<button class="btn btn-primary"><a href="/staff/task/2" style="color: white;">Selesai</a></button>
+</div></div></nav>
+</div></div>
+<div class="row">
+ <div class="col-md-12">
+  <div class="table-responsive table-bordered m-b-10">
+  <table class="table table-border table-striped table-sm table-data1"
+               bgcolor="white" bordercolor="black" width="100%">
+
+       <?php $i = 1; ?>
+       <?php foreach ($report as $item): ?>
+      
+        <tr bgcolor="antiquewhite">
+        <td align="center" colspan="4" bgcolor="lightgray"><font face="arial" size="2"><b>Maklumat Tugas Anda</b></font></td>
+        </tr><tr bgcolor="#ccccff">
+          <td rowspan="10" width="5%">&nbsp;&nbsp;&nbsp;<?= $i ?></td>
+          <td width="12%"><font face="arial" size="2"><b>Nama</b></font></td>
+          <td><font face="arial" size="2"></font><?= esc($item['nama'])?></td></tr>
+          
+           <tr bgcolor="#ccccff">
+          <td><font face="arial" size="2"><b>Tugas</b></font></td>
+          <td><font face="arial" size="2"><?= esc($item['tugas'])?></font></td>
+          <tr></tr>
+          <td><font face="arial" size="2"><b>Tempat </b></font></td>
+          <td><font face="arial" size="2"<?= esc($item['tempat'])?></font></td>
+          </tr>
+                <tr bgcolor="#ccccff">
+          <td><font face="arial" size="2"><b>Tarikh Mula:</b></font></td>
+          <td><font face="arial" size="2"><?= esc($item['hari1'])?>/<?= esc($item['bulan1'])?>/<?= esc($item['tahun1'])?></font></td>
+          </tr><tr>
+          <td><font face="arial" size="2"><b>Sehingga: </b></font></td>
+          <td><font face="arial" size="2"><?= esc($item['hari2'])?>/<?= esc($item['bulan2'])?>/<?= esc($item['tahun2'])?></font></td>
+          </tr>
+
+          <tr bgcolor="#ccccff">
+          <td><font face="arial" size="2"><b>Kuantiti</b></font></td>
+          <td><font face="arial" size="2"><?= esc($item['kuantiti'])?></font></td>
+          </tr><tr>
+          <td><font face="arial" size="2"><b>Catatan</b></font></td>
+          <td><font face="arial" size="2"><?= esc($item['catatan'])?></font></td>
+          </tr>
+
+          
+          <tr bgcolor="#ccccff">
+           <td ><font face="arial" size="2"><b>Status</b></font></td>
+          <?php if ($item['tugas_status'] == 1): ?>
+          <td><b><font face="arial" color="red">&nbsp; Belum Selesai</b>&nbsp;</td>
+          <?php else :?>
+          <td><b><font face="arial" color="green">&nbsp; Telah Selesai</b>&nbsp;</td>
+          <?php endif?>
+         </tr>
+         <tr>
+           <td colspan="2" align="center">
+            <form action="/updatetask" method="post">
+              <?= csrf_field() ?>
+              <input class="au-btn au-btn--blue" type="submit" name="update" value="Selesai"></form></td>
+          </td>
+         </tr></table>
+      <?php $i++; ?>
+      <?php endforeach; ?>
+  </div></div></div>
+      <?php else : ?>
+      <br>
+       <div class="alert alert-success" style="text-align: center;">
+         <strong>Cari Staf STM</strong>
+        </div>
+<?php endif ?>
+   </div>  
+</div>
+
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+    
+
+
